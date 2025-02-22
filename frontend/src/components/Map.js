@@ -39,6 +39,7 @@ function SimpleMap() {
                     <Map 
                         defaultZoom={18} 
                         center={currentPosition} 
+                        tilt={55}
                         fullscreenControl={false} 
                         mapId={process.env.REACT_APP_PERSONAL_MAP_ID}
                         onTilesLoaded={() => setIsLoading(false)}

@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 import Leaderboard from './components/Leaderboard';
 import { MapProvider } from './contexts/MapContext';
+import Scan from './components/Scan';
 
 function App() {
     return (
@@ -43,6 +44,11 @@ function App() {
                     <Route path="/leaderboard" element={
                         <ProtectedRoute>
                             <Leaderboard />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/scan" element={
+                        <ProtectedRoute>
+                            <Scan />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<Navigate to="/main" replace />} />
