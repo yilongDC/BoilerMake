@@ -28,10 +28,12 @@ def register():
     if users.find_one({'email': data['email']}):
         return jsonify({'error': 'Email already exists'}), 400
     
-    hashed_password = bcrypt.generate_password_hash("password").decode('utf-8') # temp password
+    # Use the actual password from the request instead of a temp password
+    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+    
     user = User(
         email=data['email'],
-        password=hashed_password,
+        password=hashed_password,  # Use the hashed password
         name=data['name'],
         sex=data['sex'],
         age=data['age'],
@@ -50,12 +52,15 @@ def login():
     users = db.get_collection(User.collection_name)
     user = users.find_one({'email': data['email']})
     
-    if user and bcrypt.check_password_hash(user['password'], data['password']):
+    if not user:
+        return jsonify({'error': 'User not found'}), 401
+        
+    if bcrypt.check_password_hash(user['password'], data['password']):
         token = jwt.encode({
             'user_id': str(user['_id']),
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
         }, os.getenv('JWT_SECRET_KEY'))
         
-        return jsonify({'token': token})
+        return jsonify({'token': token}), 200
     
     return jsonify({'error': 'Invalid credentials'}), 401
