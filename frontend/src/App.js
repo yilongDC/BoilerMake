@@ -1,21 +1,54 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Index from './components/Index';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
-import Register from './components/Register';
 import Map from './components/Map';
+import OnboardingFlow from './components/registration/OnboardingFlow';
+import Main from './components/Main';
+import Settings from './components/Settings';
+import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from './components/PublicRoute';
+import Leaderboard from './components/Leaderboard';
+import { MapProvider } from './contexts/MapContext';
 
 function App() {
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/map" element={<Map />} />
-            </Routes>
-        </Router>
-        
+        <MapProvider>
+            <Router>
+                <Routes>
+                    <Route path="/login" element={
+                        <PublicRoute>
+                            <Login />
+                        </PublicRoute>
+                    } />
+                    <Route path="/" element={
+                        <PublicRoute>
+                            <OnboardingFlow />
+                        </PublicRoute>
+                    } />
+                    <Route path="/main" element={
+                        <ProtectedRoute>
+                            <Main />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/map" element={
+                        <ProtectedRoute>
+                            <Map />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/settings" element={
+                        <ProtectedRoute>
+                            <Settings />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/leaderboard" element={
+                        <ProtectedRoute>
+                            <Leaderboard />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="*" element={<Navigate to="/main" replace />} />
+                </Routes>
+            </Router>
+        </MapProvider>
     );
 }
 

@@ -5,7 +5,7 @@ from models.user import User
 import jwt
 import datetime
 import os
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from utils.decorators import token_required
 from bson import ObjectId
 
@@ -22,8 +22,12 @@ def check_email():
         return jsonify({'exists': True}), 200
     return jsonify({'exists': False}), 200
 
-@auth_bp.route('/register', methods=['POST'])
+@auth_bp.route('/register', methods=['POST', 'OPTIONS'])
+@cross_origin(origins=["http://localhost:3000"], methods=['POST', 'OPTIONS'])
 def register():
+    if request.method == 'OPTIONS':
+        return '', 204
+        
     data = request.json
     users = db.get_collection(User.collection_name)
     
