@@ -2,10 +2,11 @@ from flask import Flask
 from flask_cors import CORS
 from routes.auth import auth_bp, bcrypt
 from config.database import db
+import os
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for all routes
+    CORS(app, resources={r"/*": {"origins": "*"}})
     
     # Initialize extensions
     bcrypt.init_app(app)
