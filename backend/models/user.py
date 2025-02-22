@@ -22,6 +22,7 @@ class User:
         self.weather_preference = weather_preference
         self.daily_water_intake = daily_water_intake
         self.created_at = datetime.utcnow()
+        self.points = 0  # Add points field
     
     def to_dict(self):
         return {
@@ -35,5 +36,6 @@ class User:
             'activity_level': self.activity_level,
             'weather_preference': self.weather_preference,
             'daily_water_intake': self.daily_water_intake,
+            'points': self.points,
             'created_at': self.created_at
         }

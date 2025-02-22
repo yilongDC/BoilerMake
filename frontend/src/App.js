@@ -10,6 +10,7 @@ import PublicRoute from './components/PublicRoute';
 import Leaderboard from './components/Leaderboard';
 import { MapProvider } from './contexts/MapContext';
 import Scan from './components/Scan';
+import VerifyQR from './components/VerifyQR';
 
 function App() {
     return (
@@ -49,6 +50,11 @@ function App() {
                     <Route path="/scan" element={
                         <ProtectedRoute>
                             <Scan />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/verify" element={
+                        <ProtectedRoute>
+                            <VerifyQR />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<Navigate to="/main" replace />} />
