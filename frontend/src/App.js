@@ -56,7 +56,7 @@ function App() {
                         <BouncingFace />
                     </ProtectedRoute>
                 } />
-                <Route path="*" element={<Navigate to="/main" replace />} />
+                <Route path="*" element={<Navigate to="/map" replace />} />
             </Routes>
         </Router>
     );

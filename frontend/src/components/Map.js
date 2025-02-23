@@ -123,9 +123,9 @@ function SimpleMap() {
                     </Map>
                 </APIProvider>
                 {isLoading && (
-                    <div className="absolute inset-0 bg-white flex items-center justify-center" style={{ zIndex: 1000 }}>
+                    <div className="absolute inset-0 bg-[#EFEDE6] flex items-center justify-center" style={{ zIndex: 1000 }}>
                         <div className="flex flex-col items-center">
-                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
+                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#BFB89B]"></div>
                             <p className="mt-4 text-gray-600">Loading map...</p>
                         </div>
                     </div>
@@ -135,7 +135,7 @@ function SimpleMap() {
             {/* Floating QR Scan Button */}
             <button
                 onClick={() => navigate('/scan')}
-                className="fixed bottom-20 right-6 w-14 h-14 bg-sky-500 rounded-full shadow-lg flex items-center justify-center z-50 hover:bg-sky-600 transition-colors"
+                className="fixed bottom-20 right-6 w-14 h-14 bg-[#BFB89B] rounded-full shadow-lg flex items-center justify-center z-50 hover:bg-[#ada789] transition-colors"
             >
                 <BsQrCodeScan className="w-6 h-6 text-white" />
             </button>

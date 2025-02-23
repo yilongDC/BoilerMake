@@ -40,7 +40,7 @@ const Login = () => {
 
             if (response.ok) {
                 setToken(data.token);  // Use auth utility
-                navigate('/main', { replace: true });
+                navigate('/map', { replace: true });
             } else {
                 setError(data.error || 'Invalid email or password');
             }

@@ -1,8 +1,13 @@
 import React from 'react';
 
 const UserStats = ({ user }) => {
-    const waterProgress = (user?.takenWater || 0) / ((user?.daily_water_intake || 2) * 1000) * 100;
+    const waterInLiters = (user?.takenWater || 0) / 1000;
+    const waterProgress = (waterInLiters / (user?.daily_water_intake || 2)) * 100;
     const pointsProgress = Math.min((user?.points || 0) / 200 * 100, 100);
+
+    const formatWater = (value) => {
+        return value === 0 ? "0" : value.toFixed(1);
+    };
 
     return (
         <div className="bg-[#EFEDE6] p-4 rounded-lg shadow-lg z-10 flex items-center gap-6">
@@ -25,7 +30,7 @@ const UserStats = ({ user }) => {
                 </div>
                 <div>
                     <div className="flex justify-between mb-1">
-                        <span>Water: {(user?.takenWater || 0)/1000}L / {user?.daily_water_intake || 2}L</span>
+                        <span>Water: {formatWater(waterInLiters)} / {user?.daily_water_intake || 2}L</span>
                     </div>
                     <div className="bg-[#FAF9F3] h-2 rounded-full">
                         <div
