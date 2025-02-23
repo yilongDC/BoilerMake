@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 
-const BouncingFace = () => {
-  const FACE_RADIUS = 40;
+const BouncingFace = forwardRef(({ onAddFace }, ref) => {
+  const FACE_RADIUS = 20; // Reduced from 40 to better fit container
   const SCATTER_RADIUS = 100; // Radius within which faces will react to clicks
   const SCATTER_FORCE = 5; // Changed from 10 to 5 for gentler scatter effect
   const VELOCITY_DECAY = 0.9995; // Changed from 0.995 to 0.9995 for much slower decay
@@ -18,7 +18,28 @@ const BouncingFace = () => {
   ]);
   const containerRef = useRef(null);
 
-  // Remove addNewFace function as it's no longer needed
+  useImperativeHandle(ref, () => ({
+    createNewFace: () => {
+      const container = containerRef.current;
+      if (!container) return;
+      
+      const newFace = {
+        id: Date.now(),
+        position: { 
+          x: container.clientWidth / 2,
+          y: container.clientHeight / 2
+        },
+        velocity: { 
+          vx: (Math.random() - 0.5) * 4,
+          vy: (Math.random() - 0.5) * 4
+        },
+        figure: `Figure${Math.floor(Math.random() * 6) + 1}`
+      };
+      
+      setFaces(prev => [...prev, newFace]);
+      if (onAddFace) onAddFace(newFace);
+    }
+  }));
 
   const checkCollision = (face1, face2) => {
     const dx = face1.position.x - face2.position.x;
@@ -155,8 +176,8 @@ const BouncingFace = () => {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       style={{
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         backgroundColor: '#fff',
         position: 'relative',
         overflow: 'hidden',
@@ -170,8 +191,8 @@ const BouncingFace = () => {
           alt="Bouncing Icon"
           style={{
             position: 'absolute',
-            left: face.position.x - FACE_RADIUS,
-            top: face.position.y - FACE_RADIUS,
+            left: `${Math.max(0, Math.min(face.position.x - FACE_RADIUS, containerRef.current?.clientWidth - FACE_RADIUS * 2))}px`,
+            top: `${Math.max(0, Math.min(face.position.y - FACE_RADIUS, containerRef.current?.clientHeight - FACE_RADIUS * 2))}px`,
             width: FACE_RADIUS * 2,
             height: FACE_RADIUS * 2,
           }}
@@ -179,6 +200,6 @@ const BouncingFace = () => {
       ))}
     </div>
   );
-};
+});
 
 export default BouncingFace;

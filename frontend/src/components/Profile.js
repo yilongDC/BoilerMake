@@ -47,82 +47,79 @@ const Profile = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-[#F4F3EE] to-white flex items-center justify-center">
-                <div className="text-[#CB997E]">Loading...</div>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-400"></div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-[#F4F3EE] to-white flex items-center justify-center">
-                <div className="text-[#E6BEAE]">{error}</div>
+            <div className="min-h-screen bg-gray-50 p-6">
+                <div className="text-red-500 text-center">{error}</div>
+                <BottomNav />
             </div>
         );
     }
 
     return (
         <motion.div 
-            className="h-screen bg-gradient-to-b from-[#F4F3EE] to-white overflow-hidden"
+            className="min-h-screen bg-gray-50 pb-20"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
         >
-            <div className="h-full max-w-md mx-auto p-6 grid grid-rows-[auto_auto_auto_1fr]">
-                {/* Header */}
-                <div className="flex justify-between items-center mb-8">
-                    <div className="flex items-center gap-3">
-                        <BsPersonCircle className="w-8 h-8 text-[#CB997E]" />
-                        <h1 className="text-xl font-bold text-[#2C3639]">Profile</h1>
-                    </div>
+            <div className="max-w-md mx-auto p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-2xl font-bold text-gray-800">Profile</h1>
                     <button
                         onClick={() => navigate('/settings')}
-                        className="p-2 rounded-full hover:bg-[#F4F3EE]"
+                        className="p-2 rounded-full hover:bg-gray-100 transition-colors"
                     >
-                        <BsGear className="w-6 h-6 text-[#CB997E]" />
+                        <BsGear className="w-6 h-6 text-gray-600" />
                     </button>
                 </div>
 
                 {/* Profile Info */}
-                <div className="bg-white rounded-xl shadow-md p-6 mb-6 border border-[#DFDBCD]">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="w-20 h-20 bg-[#F4F3EE] rounded-full flex items-center justify-center">
-                            <BsPersonCircle className="w-12 h-12 text-[#CB997E]" />
+                <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300 mb-4">
+                    <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                            <BsPersonCircle className="w-8 h-8 text-gray-600" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-[#2C3639]">{userData?.name || 'No Name'}</h2>
-                            <p className="text-[#5C6B73]">{userData?.email || 'No Email'}</p>
+                            <h2 className="text-lg font-semibold text-gray-800">{userData?.name || 'No Name'}</h2>
+                            <p className="text-gray-600">{userData?.email || 'No Email'}</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Water Progress Card */}
-                <div className="bg-white rounded-xl shadow-md p-6 mb-6 border border-[#DFDBCD]">
+                <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300 mb-4">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-lg font-semibold text-[#2C3639]">Today's Progress</h2>
-                        <IoWater className="w-6 h-6 text-[#E6BEAE]" />
+                        <h2 className="text-lg font-semibold text-gray-800">Today's Progress</h2>
+                        <IoWater className="w-6 h-6 text-gray-600" />
                     </div>
-                    <div className="bg-[#F4F3EE] rounded-lg p-4">
+                    <div className="bg-gray-100 rounded-lg p-4">
                         <div className="text-center">
-                            <span className="text-3xl font-bold text-[#CB997E]">
+                            <span className="text-3xl font-bold text-gray-800">
                                 {(userData?.takenWater / 1000).toFixed(1)}/{userData?.daily_water_intake}L
                             </span>
-                            <p className="text-[#5C6B73] mt-1">
+                            <p className="text-gray-600 mt-1">
                                 {calculateBottles(userData?.daily_water_intake || 0, userData?.takenWater || 0)} bottles remaining
                             </p>
                         </div>
-                        <div className="w-full bg-white rounded-full h-2.5 mt-4">
-                            <div 
-                                className="bg-[#E6BEAE] h-2.5 rounded-full transition-all duration-500"
-                                style={{ 
-                                    width: `${Math.min((userData?.takenWater / (userData?.daily_water_intake * 1000)) * 100, 100)}%` 
-                                }}
-                            ></div>
+                        <div className="w-full bg-white rounded-full h-2.5 mt-4 overflow-hidden">
+                            <motion.div 
+                                className="bg-gray-600 h-2.5 rounded-full"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${Math.min((userData?.takenWater / (userData?.daily_water_intake * 1000)) * 100, 100)}%` }}
+                                transition={{ duration: 1, ease: "easeOut" }}
+                            ></motion.div>
                         </div>
                     </div>
                 </div>
 
                 {/* Bouncing Face Card */}
-                <div className="bg-white rounded-xl shadow-md overflow-hidden h-64 border border-[#DFDBCD]">
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden h-64 border border-gray-300">
                     <BouncingFace />
                 </div>
             </div>
