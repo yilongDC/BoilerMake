@@ -10,6 +10,7 @@ import PublicRoute from './components/PublicRoute';
 import Leaderboard from './components/Leaderboard';
 import { MapProvider } from './contexts/MapContext';
 import Scan from './components/Scan';
+import './styles/globals.css';
 
 function App() {
     return (

@@ -1,12 +1,160 @@
+.marker {
+  position: relative;
+}
+
 .marker-content {
-    transform: translate(-50%, -100%);
+  transform: translate(-50%, -100%);
+  transition: all 0.3s ease;
+  position: absolute;
+  left: 50%;
+  top: 0;
+}
+
+.marker-content.highlight {
+  z-index: 1;
+  transform: translate(-50%, -100%) scale(1.1);
 }
 
 .marker-content .property {
-    min-width: 150px;
+  min-width: 150px;
 }
 
 .marker.highlight .property {
-    background-color: #e5e7eb;
-    transform: scale(1.05);
+  background-color: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.pin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -100%);
+}
+
+.pin-label {
+  background: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: #2563eb;
+  border: 1px solid #2563eb;
+}
+
+.pin-wrapper {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.pin {
+  width: 20px;
+  height: 20px;
+  border-radius: 50% 50% 50% 0;
+  background: #3b82f6;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+  animation-name: bounce;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.pin::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  margin: 5px 0 0 5px;
+  background: #ffffff;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.pin-shadow {
+  width: 12px;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 8px 0 0 -6px;
+  animation: shadowAnimation 1s infinite;
+}
+
+.pin-icon {
+  background: white;
+  padding: 4px;
+  border-radius: 50%;
+  font-size: 20px;
+  margin-bottom: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 2px solid #2563eb;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float 3s ease-in-out infinite;
+  position: relative;
+}
+
+.icon-background {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid white;
+}
+
+.water-icon {
+  font-size: 24px;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+}
+
+.property {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  min-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.property.highlight {
+  transform: scale(1.05);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
+}
+
+.clip-path-triangle {
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 2s infinite ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
