@@ -1,3 +1,9 @@
+export const getRandomFigure = () => {
+    const figures = ['Figure1.svg', 'Figure2.svg', 'Figure3.svg', 'Figure4.svg'];
+    const randomIndex = Math.floor(Math.random() * figures.length);
+    return figures[randomIndex];
+};
+
 export function createMarkerContent(property) {
     const content = document.createElement("div");
     content.className = "marker-content";

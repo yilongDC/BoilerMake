@@ -19,6 +19,7 @@ function SimpleMap() {
     const [currentPosition, setCurrentPosition] = useState(defaultCenter);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [user, setUser] = useState(null);
+    const [isAnyPopupOpen, setIsAnyPopupOpen] = useState(false);
 
     // Get user location
     useEffect(() => {
@@ -68,7 +69,14 @@ function SimpleMap() {
     }, [navigate]);
 
     const handleMarkerClick = (property) => {
-        setSelectedMarker(selectedMarker?.id === property.id ? null : property);
+        const newSelectedMarker = selectedMarker?.id === property.id ? null : property;
+        setSelectedMarker(newSelectedMarker);
+        setIsAnyPopupOpen(!!newSelectedMarker);
+    };
+
+    const handleMapClick = () => {
+        setSelectedMarker(null);
+        setIsAnyPopupOpen(false);
     };
 
     return (
@@ -87,6 +95,7 @@ function SimpleMap() {
                         mapId={process.env.REACT_APP_PERSONAL_MAP_ID}
                         onLoaded={() => setIsLoading(false)}
                         disableDefaultUI={true}
+                        onClick={handleMapClick}
                     >
                         {properties.map((property) => (
                             <AdvancedMarker
@@ -97,6 +106,7 @@ function SimpleMap() {
                                 <MarkerContent 
                                     property={property}
                                     isSelected={selectedMarker?.id === property.id}
+                                    anyPopupOpen={isAnyPopupOpen}
                                 />
                             </AdvancedMarker>
                         ))}
