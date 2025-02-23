@@ -10,10 +10,10 @@ def create_app():
     
     CORS(app, 
         resources={
-            r"/*": {
+            r"/api/*": {
                 "origins": ["http://localhost:3000"],
-                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-                "allow_headers": ["Content-Type"],
+                "methods": ["GET", "POST", "OPTIONS"],
+                "allow_headers": ["Content-Type", "Authorization"],
             }
         }
     )
