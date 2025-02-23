@@ -15,20 +15,33 @@ const VerifyQR = () => {
                 return;
             }
 
+            // Clean the QR code and log it
+            const cleanQRCode = location.state.qrCode.trim();
+            console.log('Sending QR code to backend:', cleanQRCode);
+
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.post('http://localhost:5000/api/qr/scan', 
-                    { qr_code: location.state.qrCode },
-                    { headers: { 'Authorization': token } }
-                );
+                console.log("gg");
+                const response = axios.post('http://localhost:5000/api/qr/scan', { qr_code: cleanQRCode }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Correct format
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true // Correctly placed
+                })
+                .then(response => {
+                    console.log(response.data);
+                  })
+                  .catch(error => {
+                    console.error(error);
+                  });
                 
+                console.log('Backend response:', response.data);
                 setVerificationStatus('success');
                 setPoints(response.data.points_earned);
             } catch (error) {
-                setVerificationStatus('error');
-                if (error.response?.status === 429) {
-                    setVerificationStatus('cooldown');
-                }
+                console.error('Error:', error);
+                setVerificationStatus(error.response?.status === 429 ? 'cooldown' : 'error');
             }
         };
 

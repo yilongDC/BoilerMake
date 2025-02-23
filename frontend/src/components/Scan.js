@@ -19,6 +19,7 @@ const Scan = () => {
         scanner.render(success, error);
 
         function success(result) {
+            console.log('QR Code scanned:', result);  // Add logging
             scanner.clear();
             setScanResult(result);
             // Navigate to verification page with QR code

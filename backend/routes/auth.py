@@ -11,7 +11,8 @@ from bson import ObjectId
 
 auth_bp = Blueprint('auth', __name__)
 bcrypt = Bcrypt()
-CORS(auth_bp, origins="http://localhost:3000") # Enable CORS for the auth blueprint, allowing requests from localhost:3000
+CORS(auth_bp, resources={r"/api/*": {"origins": "http://localhost:5000",
+         "supports_credentials":True}}) # Enable CORS for the auth blueprint, allowing requests from localhost:3000
 
 @auth_bp.route('/check-email', methods=['GET'])
 def check_email():

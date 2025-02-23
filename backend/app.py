@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from routes.auth import auth_bp, bcrypt
-from routes.qr import qr_bp  # Add this import
+from routes.qr import qr_bp
 from config.database import db
 import os
 
@@ -12,10 +12,11 @@ def create_app():
     CORS(app, resources={
         r"/api/*": {
             "origins": ["http://localhost:3000"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "methods": ["GET", "POST", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True,
             "expose_headers": ["Content-Type", "Authorization"],
-            "supports_credentials": True
+            "Access-Control-Allow-Origin": "*"
         }
     })
     
@@ -24,7 +25,7 @@ def create_app():
     
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
-    app.register_blueprint(qr_bp, url_prefix='/api/qr')  # Add this line
+    app.register_blueprint(qr_bp, url_prefix='/api/qr')
     
     # Ensure database connection
     db.connect()
