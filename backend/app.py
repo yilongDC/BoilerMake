@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, make_response, jsonify
 from flask_cors import CORS
 from routes.auth import auth_bp, bcrypt
 from config.database import db
@@ -7,14 +7,14 @@ import os
 def create_app():
     app = Flask(__name__)
     
-    # Update CORS configuration to be more specific
-    CORS(app, resources={
-        r"/api/*": {
-            "origins": ["http://localhost:3000"],
-            "methods": ["GET", "POST", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"]
-        }
-    })
+    # Simpler CORS setup
+    CORS(app, 
+         resources={r"/api/*": {
+             "origins": "*",
+             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+             "allow_headers": ["Content-Type", "Authorization"]
+         }}
+    )
     
     # Initialize extensions
     bcrypt.init_app(app)

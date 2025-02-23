@@ -22,6 +22,10 @@ class User:
         self.weather_preference = weather_preference
         self.daily_water_intake = daily_water_intake
         self.created_at = datetime.utcnow()
+        self.points = 0
+        self.disabledUntil = None
+        self.takenWater = 0.0
+        self.lastLocationId = None
     
     def to_dict(self):
         return {
@@ -35,5 +39,9 @@ class User:
             'activity_level': self.activity_level,
             'weather_preference': self.weather_preference,
             'daily_water_intake': self.daily_water_intake,
-            'created_at': self.created_at
+            'created_at': self.created_at,
+            'points': self.points,
+            'disabledUntil': self.disabledUntil,
+            'takenWater': self.takenWater,
+            'lastLocationId': self.lastLocationId
         }
