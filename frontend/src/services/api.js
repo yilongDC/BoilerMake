@@ -71,4 +71,7 @@ export const getCurrentUser = async () => {
     }
 };
 
+// Replace getUserProfile with getCurrentUser
+export const getUserProfile = getCurrentUser;
+
 export default api;

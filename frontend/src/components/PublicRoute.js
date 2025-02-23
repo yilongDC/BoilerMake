@@ -3,7 +3,7 @@ import { isAuthenticated } from '../utils/auth';
 
 const PublicRoute = ({ children }) => {
     if (isAuthenticated()) {
-        return <Navigate to="/main" />;
+        return <Navigate to="/map" />;
     }
 
     return children;

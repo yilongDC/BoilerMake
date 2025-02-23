@@ -14,7 +14,7 @@ const BottomNav = () => {
             <div className="flex justify-around items-center max-w-md mx-auto">
                 <button
                     onClick={() => navigate('/leaderboard')}
-                    className={`flex flex-col items-center p-1.5 ${isActive('/leaderboard') ? 'text-[#BFB89B]' : 'text-gray-600'}`}
+                    className={`flex flex-col items-center p-1.5 ${isActive('/leaderboard') ? 'text-[#A19A75]' : 'text-gray-600'}`}
                 >
                     <IoTrophy className="w-6 h-6" />
                     <span className="text-xs mt-1">Leaderboard</span>
@@ -27,11 +27,11 @@ const BottomNav = () => {
                     <span className="text-xs text-white -mt-0.5">Map</span>
                 </button>
                 <button
-                    onClick={() => navigate('/main')}
-                    className={`flex flex-col items-center p-1.5 ${isActive('/main') ? 'text-[#BFB89B]' : 'text-gray-600'}`}
+                    onClick={() => navigate('/profile')}
+                    className={`flex flex-col items-center p-1.5 ${isActive('/profile') ? 'text-[#A19A75]' : 'text-gray-600'}`}
                 >
                     <IoWater className="w-6 h-6" />
-                    <span className="text-xs mt-1">Profile</span>
+                    <span className="text-xs mt-1 mx-4">Profile</span>
                 </button>
             </div>
         </div>

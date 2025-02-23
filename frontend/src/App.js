@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Map from './components/Map';
 import OnboardingFlow from './components/registration/OnboardingFlow';
-import Main from './components/Main';
+import Profile from './components/Profile';
 import Settings from './components/Settings';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
@@ -26,9 +26,9 @@ function App() {
                         <OnboardingFlow />
                     </PublicRoute>
                 } />
-                <Route path="/main" element={
+                <Route path="/profile" element={
                     <ProtectedRoute>
-                        <Main />
+                        <Profile />
                     </ProtectedRoute>
                 } />
                 <Route path="/map" element={

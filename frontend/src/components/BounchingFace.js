@@ -18,26 +18,7 @@ const BouncingFace = () => {
   ]);
   const containerRef = useRef(null);
 
-  const addNewFace = () => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const { clientWidth, clientHeight } = container;
-    const newFace = {
-      id: Date.now(),
-      position: {
-        x: Math.random() * (clientWidth - FACE_RADIUS * 2) + FACE_RADIUS,
-        y: Math.random() * (clientHeight - FACE_RADIUS * 2) + FACE_RADIUS
-      },
-      velocity: {
-        vx: (Math.random() - 0.5) * 4,
-        vy: (Math.random() - 0.5) * 4
-      },
-      figure: `Figure${Math.floor(Math.random() * 6) + 1}`
-    };
-
-    setFaces(prevFaces => [...prevFaces, newFace]);
-  };
+  // Remove addNewFace function as it's no longer needed
 
   const checkCollision = (face1, face2) => {
     const dx = face1.position.x - face2.position.x;
@@ -182,24 +163,6 @@ const BouncingFace = () => {
         cursor: 'pointer',
       }}
     >
-      <button
-        onClick={addNewFace}
-        style={{
-          position: 'fixed',
-          top: '20px',
-          left: '20px',
-          zIndex: 1000,
-          padding: '10px 20px',
-          fontSize: '16px',
-          borderRadius: '5px',
-          backgroundColor: '#4CAF50',
-          color: 'white',
-          border: 'none',
-          cursor: 'pointer'
-        }}
-      >
-        Add Face
-      </button>
       {faces.map(face => (
         <img
           key={face.id}

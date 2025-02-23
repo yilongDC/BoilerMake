@@ -5,7 +5,7 @@ export const properties = [
         imageUrl: "https://res.cloudinary.com/di30bgxfr/image/upload/c_thumb,w_200,g_face/v1740265183/Fountain1floor1_byqnwk.jpg ",
         position: {
             lat: 40.4284890,
-            lng: -86.9223081,
+            lng: -86.9223081-0.00005,
         },
         locationDescription: "First floor, 3 water stations, feast",
     },
@@ -15,7 +15,7 @@ export const properties = [
         imageUrl: "https://res.cloudinary.com/di30bgxfr/image/upload/c_thumb,w_200,g_face/v1740272853/Fountain3floor1_jtgw5i.jpg",
         position: {
             lat: 40.4284757,
-            lng: -86.9225098,
+            lng: -86.9225098-0.0002,
         },
         locationDescription: "Swimming pool lesure area",
     },
@@ -25,7 +25,7 @@ export const properties = [
         imageUrl: "https://res.cloudinary.com/di30bgxfr/image/upload/c_thumb,w_200,g_face/v1740265177/Fountain2floor1_ct2ikq.jpg",
         position: {
             lat: 40.4282560,
-            lng: -86.9219710,
+            lng: -86.9219710-0.0004,
         },
         locationDescription: "First floor, near treadmills",
     },
@@ -35,7 +35,7 @@ export const properties = [
         imageUrl: "https://res.cloudinary.com/di30bgxfr/image/upload/c_thumb,w_200,g_face/v1740265187/fountain4floorb_v77abp.jpg",
         position: {
             lat: 40.4283866,
-            lng: -86.9222863,
+            lng: -86.9222863-0.0000,
         },
         locationDescription: "Ground floor, next to the gym entrance",
     },
@@ -45,7 +45,7 @@ export const properties = [
         imageUrl: "https://res.cloudinary.com/di30bgxfr/image/upload/c_thumb,w_200,g_face/v1740265179/fountain5floorb_tlfahi.jpg",
         position: {
             lat: 40.4282221,
-            lng: -86.9219585,
+            lng: -86.9219585-0.0002,
         },
         locationDescription: "Ground floor, near rock climbing",
     },
@@ -55,7 +55,7 @@ export const properties = [
         imageUrl: "https://res.cloudinary.com/di30bgxfr/image/upload/c_thumb,w_200,g_face/v1740265193/fountain10b_wofdns.jpg",
         position: {
             lat: 40.4280618,
-            lng: -86.9223893,
+            lng: -86.9223893-0.00006,
         },
         locationDescription: "Ground floor, near Alienware Gaming center",
     },
@@ -104,7 +104,7 @@ export const properties = [
         id: "COREC7",
         imageUrl: "https://res.cloudinary.com/di30bgxfr/image/upload/c_thumb,w_200,g_face/v1740273314/fountainspecial_c99h4z.jpg",
         position: {
-            lat: 40.4285101,
+            lat: 40.4285101+0.0004,
             lng: -86.9225400,
         },
         locationDescription: "BoilerMake Feast Venue",

@@ -1,5 +1,5 @@
 export const getRandomFigure = () => {
-    const figures = ['Figure1.svg', 'Figure2.svg', 'Figure3.svg', 'Figure4.svg'];
+    const figures = ['Figure1.svg', 'Figure2.svg', 'Figure3.svg', 'Figure4.svg', 'Figure5.svg', 'Figure6.svg'];
     const randomIndex = Math.floor(Math.random() * figures.length);
     return figures[randomIndex];
 };
