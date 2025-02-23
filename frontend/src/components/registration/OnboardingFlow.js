@@ -171,15 +171,17 @@ const OnboardingFlow = () => {
     return (
         <div className="onboarding-container">
             {renderStep()}
-            <div className="progress-indicator">
-                {Array(9).fill(0).map((_, i) => (
-                    <div 
-                        key={i} 
-                        className={`progress-dot ${i + 1 <= step ? 'active' : ''}`}
-                        aria-label={`Step ${i + 1} of 9`}
-                    />
-                ))}
-            </div>
+            {step > 1 && ( 
+                <div className="progress-indicator">
+                    {Array(8).fill(0).map((_, i) => (
+                        <div 
+                            key={i+2} 
+                            className={`progress-dot ${i+2 <= step ? 'active' : ''}`}
+                            aria-label={`Step ${i+2} of 8`}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

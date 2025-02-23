@@ -124,7 +124,7 @@ const HeightStep = ({ height, sex, updateData, onNext, onBack }) => {
                                     key={val}
                                     className={`h-[60px] w-full flex items-center justify-center transition-all duration-200 cursor-pointer select-none ${
                                         value === val 
-                                            ? 'text-7xl font-bold text-sky-500 scale-110' 
+                                            ? 'text-6xl font-bold text-sky-500 scale-110' // changed from text-7xl to text-6xl
                                             : value === val + 1 || value === val - 1
                                             ? 'text-3xl text-gray-400'
                                             : 'text-xl text-gray-300'
