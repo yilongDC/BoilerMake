@@ -5,17 +5,21 @@ import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
 import BottomNav from './BottomNav';
 import { properties } from '../data/properties';
 import MarkerContent from './MarkerContent';
+import UserStats from './UserStats';
+import { getCurrentUser } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
 function SimpleMap() {
+    const navigate = useNavigate();
     const defaultCenter = { lat: 40.427562, lng: -86.912748 }; // Centered on WALC
     const [isLoading, setIsLoading] = useState(true);
     const [currentPosition, setCurrentPosition] = useState(defaultCenter);
     const [selectedMarker, setSelectedMarker] = useState(null);
-    const [points, setPoints] = useState(50); // Example points value
-    const [water, setWater] = useState(4); // Example water value
+    const [user, setUser] = useState(null);
 
+    // Get user location
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -37,45 +41,40 @@ function SimpleMap() {
         }
     }, []);
 
+    // Fetch user data
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        const fetchUser = async () => {
+            try {
+                const userData = await getCurrentUser();
+                setUser(userData);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+                if (error.response?.status === 401) {
+                    navigate('/login');
+                }
+            }
+        };
+
+        fetchUser();
+        const interval = setInterval(fetchUser, 60000); // Refresh every minute
+        return () => clearInterval(interval);
+    }, [navigate]);
+
     const handleMarkerClick = (property) => {
         setSelectedMarker(selectedMarker?.id === property.id ? null : property);
     };
 
     return (
         <div className="relative w-full h-screen">
-            {/* Profile Section with Stats */}
-            <div className="absolute top-4 left-4 bg-white p-4 rounded-lg shadow-lg z-10 flex items-center gap-6">
-                <img
-                    src="/default-avatar.png"
-                    alt="Profile"
-                    className="w-16 h-16 rounded-full border-2 border-white shadow-lg"
-                />
-                <div className="flex-1 min-w-[200px]">
-                    <div className="mb-2">
-                        <div className="flex justify-between mb-1">
-                            <span>Points: {points}</span>
-                            <span>{points}/100</span>
-                        </div>
-                        <div className="bg-gray-200 h-2 rounded-full">
-                            <div
-                                className="bg-green-500 h-2 rounded-full"
-                                style={{ width: `${points}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex justify-between mb-1">
-                            <span>Water: {water}L</span>
-                            <span>{water}/8L</span>
-                        </div>
-                        <div className="bg-gray-200 h-2 rounded-full">
-                            <div
-                                className="bg-blue-500 h-2 rounded-full"
-                                style={{ width: `${(water/8) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                </div>
+            {/* User Stats */}
+            <div className="absolute top-4 left-4 z-10">
+                <UserStats user={user} />
             </div>
 
             <div className="h-screen">

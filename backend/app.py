@@ -7,14 +7,27 @@ import os
 def create_app():
     app = Flask(__name__)
     
-    # Simpler CORS setup
+    # Configure CORS
     CORS(app, 
-         resources={r"/api/*": {
-             "origins": "*",
-             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-             "allow_headers": ["Content-Type", "Authorization"]
-         }}
+        resources={r"/api/*": {
+            "origins": ["http://localhost:3000", "http://127.0.0.1:3000"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True,
+            "expose_headers": ["Content-Range", "X-Content-Range"]
+        }},
+        supports_credentials=True
     )
+    
+    # Add CORS headers to all responses
+    @app.after_request
+    def after_request(response):
+        header = response.headers
+        header['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+        header['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+        header['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS'
+        header['Access-Control-Allow-Credentials'] = 'true'
+        return response
     
     # Initialize extensions
     bcrypt.init_app(app)

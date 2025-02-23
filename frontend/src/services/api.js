@@ -3,7 +3,7 @@ import axios from 'axios';
 const api = axios.create({
     baseURL: 'http://127.0.0.1:5000/api',
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     },
     withCredentials: false
 });
@@ -14,8 +14,22 @@ api.interceptors.request.use((config) => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+    // Remove CORS headers from request
+    delete config.headers['Access-Control-Allow-Origin'];
     return config;
 });
+
+// Add response interceptor for error handling
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
 
 export const getLeaderboard = async () => {
     try {
@@ -33,6 +47,16 @@ export const checkIn = async (locationId) => {
         return response.data;
     } catch (error) {
         console.error('Error checking in:', error);
+        throw error;
+    }
+};
+
+export const getCurrentUser = async () => {
+    try {
+        const response = await api.get('/auth/user/me');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching user data:', error);
         throw error;
     }
 };

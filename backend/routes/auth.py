@@ -3,17 +3,15 @@ from flask_bcrypt import Bcrypt
 from config.database import db
 from models.user import User
 import jwt
-import datetime
+from datetime import datetime, timedelta  # Changed import
 import os
 from flask_cors import CORS, cross_origin
 from utils.decorators import token_required
 from bson import ObjectId
-from datetime import datetime, timedelta
 from models.locations import VALID_LOCATION_IDS
 
 auth_bp = Blueprint('auth', __name__)
 bcrypt = Bcrypt()
-CORS(auth_bp, origins="http://localhost:3000") # Enable CORS for the auth blueprint, allowing requests from localhost:3000
 
 @auth_bp.route('/check-email', methods=['GET'])
 def check_email():
@@ -87,7 +85,7 @@ def login():
     if bcrypt.check_password_hash(user['password'], data['password']):
         token = jwt.encode({
             'user_id': str(user['_id']),
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
+            'exp': datetime.utcnow() + timedelta(days=1)  # Fixed datetime usage
         }, os.getenv('JWT_SECRET_KEY'))
         
         return jsonify({'token': token}), 200
@@ -167,8 +165,15 @@ def checkin(current_user):
     
     return jsonify({'error': 'Check-in failed'}), 400
 
-@auth_bp.route('/leaderboard', methods=['GET'])
+@auth_bp.route('/leaderboard', methods=['GET', 'OPTIONS'])
 def get_leaderboard():
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,OPTIONS')
+        return response
+        
     users = db.get_collection(User.collection_name)
     pipeline = [
         {
