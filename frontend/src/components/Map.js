@@ -8,6 +8,7 @@ import MarkerContent from './MarkerContent';
 import UserStats from './UserStats';
 import { getCurrentUser } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { BsQrCodeScan } from 'react-icons/bs'; // Add this import
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
@@ -110,6 +111,15 @@ function SimpleMap() {
                     </div>
                 )}
             </div>
+
+            {/* Floating QR Scan Button */}
+            <button
+                onClick={() => navigate('/scan')}
+                className="fixed bottom-20 right-6 w-14 h-14 bg-sky-500 rounded-full shadow-lg flex items-center justify-center z-50 hover:bg-sky-600 transition-colors"
+            >
+                <BsQrCodeScan className="w-6 h-6 text-white" />
+            </button>
+
             <BottomNav />
         </div>
     );

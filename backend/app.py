@@ -1,32 +1,39 @@
-from flask import Flask, make_response, jsonify
+from flask import Flask, make_response, jsonify, request
 from flask_cors import CORS
 from routes.auth import auth_bp, bcrypt
+from routes.checkin import checkin_bp  # Add this import
 from config.database import db
 import os
 
 def create_app():
     app = Flask(__name__)
     
-    # Configure CORS
     CORS(app, 
-        resources={r"/api/*": {
-            "origins": ["http://localhost:3000", "http://127.0.0.1:3000"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"],
-            "supports_credentials": True,
-            "expose_headers": ["Content-Range", "X-Content-Range"]
-        }},
-        supports_credentials=True
+        resources={
+            r"/*": {
+                "origins": ["http://localhost:3000"],
+                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+                "allow_headers": ["Content-Type"],
+            }
+        }
     )
     
     # Add CORS headers to all responses
     @app.after_request
     def after_request(response):
-        header = response.headers
-        header['Access-Control-Allow-Origin'] = 'http://localhost:3000'
-        header['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
-        header['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS'
-        header['Access-Control-Allow-Credentials'] = 'true'
+        if request.method == 'OPTIONS':
+            response = make_response()
+            response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+            response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            response.status_code = 204
+            return response
+            
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
     
     # Initialize extensions
@@ -34,6 +41,7 @@ def create_app():
     
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(checkin_bp, url_prefix='/api')  # Add this line
     
     # Ensure database connection
     db.connect()

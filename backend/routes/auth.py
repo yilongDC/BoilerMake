@@ -9,6 +9,7 @@ from flask_cors import CORS, cross_origin
 from utils.decorators import token_required
 from bson import ObjectId
 from models.locations import VALID_LOCATION_IDS
+from config.config import SECRET_KEY
 
 auth_bp = Blueprint('auth', __name__)
 bcrypt = Bcrypt()
@@ -83,10 +84,11 @@ def login():
         return jsonify({'error': 'User not found'}), 401
         
     if bcrypt.check_password_hash(user['password'], data['password']):
-        token = jwt.encode({
-            'user_id': str(user['_id']),
-            'exp': datetime.utcnow() + timedelta(days=1)  # Fixed datetime usage
-        }, os.getenv('JWT_SECRET_KEY'))
+        token = jwt.encode(
+            {'user_id': str(user['_id']), 'exp': datetime.utcnow() + timedelta(days=1)},
+            SECRET_KEY,  # Make sure to use the imported SECRET_KEY
+            algorithm='HS256'
+        )
         
         return jsonify({'token': token}), 200
     
@@ -145,7 +147,7 @@ def checkin(current_user):
         {'_id': user_id},
         {
             '$inc': {
-                'points': 10,
+                'points': 20,
                 'takenWater': 300
             },
             '$set': {
