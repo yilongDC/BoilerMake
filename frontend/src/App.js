@@ -10,6 +10,7 @@ import PublicRoute from './components/PublicRoute';
 import Leaderboard from './components/Leaderboard';
 import { MapProvider } from './contexts/MapContext';
 import Scan from './components/Scan';
+import BouncingFace from './components/BounchingFace';
 import './styles/globals.css';
 
 function App() {
@@ -50,6 +51,11 @@ function App() {
                     <Route path="/scan" element={
                         <ProtectedRoute>
                             <Scan />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/bounce" element={
+                        <ProtectedRoute>
+                            <BouncingFace />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<Navigate to="/main" replace />} />
