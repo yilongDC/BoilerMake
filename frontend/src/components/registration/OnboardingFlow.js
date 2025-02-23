@@ -147,6 +147,7 @@ const OnboardingFlow = () => {
 
             const response = await fetch('http://127.0.0.1:5000/api/auth/register', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
@@ -154,14 +155,14 @@ const OnboardingFlow = () => {
                 body: JSON.stringify(convertedData)
             });
             
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Registration failed');
+            if (response.status === 201) {
+                console.log('Registration successful');
+                navigate('/login');
+                return;
             }
-            
-            const data = await response.json();
-            console.log('Registration successful:', data);
-            navigate('/login');
+
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Registration failed with status: ${response.status}`);
         } catch (error) {
             console.error('Registration error:', error);
             // Add error handling UI feedback here
@@ -173,11 +174,11 @@ const OnboardingFlow = () => {
             {renderStep()}
             {step > 1 && ( 
                 <div className="progress-indicator">
-                    {Array(8).fill(0).map((_, i) => (
+                    {Array(9).fill(0).map((_, i) => (
                         <div 
-                            key={i+2} 
-                            className={`progress-dot ${i+2 <= step ? 'active' : ''}`}
-                            aria-label={`Step ${i+2} of 8`}
+                            key={i} 
+                            className={`progress-dot ${i+1 <= step ? 'active' : ''}`}
+                            aria-label={`Step ${i+1} of 9`}
                         />
                     ))}
                 </div>
