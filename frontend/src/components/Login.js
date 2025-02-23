@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { BsCup } from 'react-icons/bs';
+import { setToken } from '../utils/auth';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -38,8 +39,8 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.setItem('token', data.token);
-                navigate('/main');  // Changed from /dashboard to /main
+                setToken(data.token);  // Use auth utility
+                navigate('/main', { replace: true });
             } else {
                 setError(data.error || 'Invalid email or password');
             }

@@ -8,7 +8,8 @@ import MarkerContent from './MarkerContent';
 import UserStats from './UserStats';
 import { getCurrentUser } from '../services/api';
 import { useNavigate } from 'react-router-dom';
-import { BsQrCodeScan } from 'react-icons/bs'; // Add this import
+import { BsQrCodeScan } from 'react-icons/bs';
+import { isAuthenticated, getToken } from '../utils/auth';  // Add this import
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
@@ -43,28 +44,37 @@ function SimpleMap() {
         }
     }, []);
 
+    // Add debug useEffect
+    useEffect(() => {
+        const token = getToken();
+        console.log('Map Debug:', {
+            hasToken: !!token,
+            tokenValue: token?.substring(0, 10) + '...',  // Show first 10 chars only
+            isLoading,
+            hasUser: !!user
+        });
+    }, [isLoading, user]);
+
     // Fetch user data
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-
         const fetchUser = async () => {
             try {
                 const userData = await getCurrentUser();
+                console.log('User data fetched successfully:', !!userData);
                 setUser(userData);
             } catch (error) {
-                console.error('Error fetching user:', error);
+                console.error('Error fetching user:', {
+                    status: error.response?.status,
+                    message: error.message
+                });
                 if (error.response?.status === 401) {
-                    navigate('/login');
+                    navigate('/login', { replace: true });
                 }
             }
         };
 
         fetchUser();
-        const interval = setInterval(fetchUser, 60000); // Refresh every minute
+        const interval = setInterval(fetchUser, 60000);
         return () => clearInterval(interval);
     }, [navigate]);
 

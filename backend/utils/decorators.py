@@ -1,43 +1,51 @@
 from functools import wraps
 from flask import request, jsonify
-from config.database import db
 import jwt
-import os
+from config.config import SECRET_KEY
+from config.database import db
 from bson import ObjectId
 
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token:
-            return jsonify({'error': 'Token is missing'}), 401
+        token = None
+        auth_header = request.headers.get('Authorization')
         
+        print(f"Auth header received: {auth_header}")  # Debug log
+        
+        if auth_header:
+            try:
+                token = auth_header.split(" ")[1]
+            except IndexError:
+                print("Malformed Authorization header")
+                return jsonify({'error': 'Token is invalid'}), 401
+        
+        if not token:
+            print("No token found")
+            return jsonify({'error': 'Token is missing'}), 401
+
         try:
-            # Remove 'Bearer ' prefix if present
-            if token.startswith('Bearer '):
-                token = token[7:]
-            
-            # Decode the token
-            data = jwt.decode(token, os.getenv('JWT_SECRET_KEY'), algorithms=["HS256"])
-            
-            # Convert string ID to ObjectId for MongoDB query
-            user_id = ObjectId(data['user_id'])
-            current_user = db.get_collection('users').find_one({'_id': user_id})
+            print(f"Decoding token: {token[:20]}...")  # Debug log
+            data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            users = db.get_collection('users')
+            current_user = users.find_one({'_id': ObjectId(data['user_id'])})
             
             if not current_user:
+                print(f"No user found for ID: {data['user_id']}")
                 return jsonify({'error': 'User not found'}), 401
                 
+            print(f"User authenticated: {current_user['email']}")  # Debug log
+            
         except jwt.ExpiredSignatureError:
+            print("Token expired")
             return jsonify({'error': 'Token has expired'}), 401
-        except jwt.InvalidTokenError:
-            return jsonify({'error': 'Invalid token format'}), 401
-        except (jwt.DecodeError, jwt.InvalidAlgorithmError):
+        except jwt.InvalidTokenError as e:
+            print(f"Invalid token error: {str(e)}")
             return jsonify({'error': 'Token is invalid'}), 401
         except Exception as e:
-            print(f"Token validation error: {str(e)}")  # Debug log
-            return jsonify({'error': 'Authentication failed'}), 401
-        
-        # Call the wrapped function with the current user
+            print(f"Unexpected error: {str(e)}")
+            return jsonify({'error': 'Token is invalid'}), 401
+
         return f(current_user, *args, **kwargs)
-    
+
     return decorated

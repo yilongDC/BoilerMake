@@ -1,21 +1,25 @@
 import axios from 'axios';
+import { getToken } from '../utils/auth';
 
 const api = axios.create({
     baseURL: 'http://127.0.0.1:5000/api',
     headers: {
         'Content-Type': 'application/json',
-    },
-    withCredentials: false
+    }
 });
 
 // Add request interceptor to add token
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
+    console.log('API Request Debug:', {
+        endpoint: config.url,
+        hasToken: !!token,
+        tokenPrefix: token?.substring(0, 20)
+    });
+    
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
-    // Remove CORS headers from request
-    delete config.headers['Access-Control-Allow-Origin'];
     return config;
 });
 
@@ -53,10 +57,16 @@ export const checkIn = async (locationId) => {
 
 export const getCurrentUser = async () => {
     try {
+        console.log('Getting current user...');
         const response = await api.get('/auth/user/me');
+        console.log('User data response:', response.data);
         return response.data;
     } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('getCurrentUser error:', {
+            status: error.response?.status,
+            data: error.response?.data,
+            message: error.message
+        });
         throw error;
     }
 };
