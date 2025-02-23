@@ -1,15 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { APIProvider, Map } from "@vis.gl/react-google-maps";
+import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
 import BottomNav from './BottomNav';
+import { properties } from '../data/properties';
+import MarkerContent from './MarkerContent';
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
 function SimpleMap() {
-    const defaultCenter = { lat: 37.7749, lng: -122.4194 };
+    const defaultCenter = { lat: 40.4289616, lng: -86.922324 };
     const [isLoading, setIsLoading] = useState(true);
     const [currentPosition, setCurrentPosition] = useState(defaultCenter);
+    const [selectedMarker, setSelectedMarker] = useState(null);
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -32,18 +35,35 @@ function SimpleMap() {
         }
     }, []);
 
+    const handleMarkerClick = (property) => {
+        setSelectedMarker(selectedMarker === property ? null : property);
+    };
+
     return (
-        <div className="relative h-screen">
-            <div className="h-[calc(100vh-64px)] relative">
+        <div className="h-screen">
+            <div className="h-screen">
                 <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
                     <Map 
-                        defaultZoom={18} 
+                        defaultZoom={17} 
                         center={currentPosition} 
-                        tilt={55}
-                        fullscreenControl={false} 
+                        tilt={45}
                         mapId={process.env.REACT_APP_PERSONAL_MAP_ID}
-                        onTilesLoaded={() => setIsLoading(false)}
-                    />
+                        onLoaded={() => setIsLoading(false)}
+                        disableDefaultUI={true}
+                    >
+                        {properties.map((property) => (
+                            <AdvancedMarker
+                                key={property.id}
+                                position={property.position}
+                                onClick={() => handleMarkerClick(property)}
+                            >
+                                <MarkerContent 
+                                    property={property}
+                                    isSelected={selectedMarker?.id === property.id}
+                                />
+                            </AdvancedMarker>
+                        ))}
+                    </Map>
                 </APIProvider>
                 {isLoading && (
                     <div className="absolute inset-0 bg-white flex items-center justify-center" style={{ zIndex: 1000 }}>

@@ -1,0 +1,12 @@
+.marker-content {
+    transform: translate(-50%, -100%);
+}
+
+.marker-content .property {
+    min-width: 150px;
+}
+
+.marker.highlight .property {
+    background-color: #e5e7eb;
+    transform: scale(1.05);
+}
