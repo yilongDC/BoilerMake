@@ -20,32 +20,40 @@ const Scan = () => {
         scanner.render(success, error);
 
         async function success(result) {
+
             scanner.clear();
             setStatus('processing');
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/checkin', {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('No authentication token found');
+                }
+
+                // First API call for check-in
+                const checkInResponse = await fetch('http://127.0.0.1:5000/api/checkin', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     },
                     body: JSON.stringify({ locationId: result })
                 });
 
-                const data = await response.json();
-                
-                if (response.ok) {
-                    setStatus('success');
-                    setMessage(data.message || 'Check-in successful!');
-                    setTimeout(() => navigate('/map'), 2000);
-                } else {
-                    setStatus('error');
-                    setMessage(data.error || 'Failed to check in');
+                if (!checkInResponse.ok) {
+                    const errorData = await checkInResponse.json();
+                    throw new Error(errorData.error || 'Check-in failed');
                 }
+
+                const checkInData = await checkInResponse.json();
+                
+                setStatus('success');
+                setMessage(checkInData.message);
+                setTimeout(() => navigate('/map'), 2000);
             } catch (error) {
-                setStatus('error');
-                setMessage('Network error. Please try again.');
                 console.error('Check-in error:', error);
+                setStatus('error');
+                setMessage(error.message || 'Network error. Please make sure you are connected to the internet.');
             }
         }
 

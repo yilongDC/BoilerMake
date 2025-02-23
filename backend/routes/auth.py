@@ -167,6 +167,30 @@ def checkin(current_user):
     
     return jsonify({'error': 'Check-in failed'}), 400
 
+@auth_bp.route('/update-points', methods=['POST'])
+@token_required
+def update_points(current_user):
+    users = db.get_collection(User.collection_name)
+    user_id = current_user['_id']
+    
+    # Update user's points
+    update_result = users.update_one(
+        {'_id': user_id},
+        {
+            '$inc': {
+                'points': 10
+            }
+        }
+    )
+
+    if update_result.modified_count > 0:
+        return jsonify({
+            'message': 'Points updated successfully',
+            'pointsAdded': 10
+        }), 200
+    
+    return jsonify({'error': 'Failed to update points'}), 400
+
 @auth_bp.route('/leaderboard', methods=['GET', 'OPTIONS'])
 def get_leaderboard():
     if request.method == 'OPTIONS':
